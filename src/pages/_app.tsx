@@ -4,7 +4,7 @@ import { FullPageBanner } from "@/components/FullPageBanner";
 import { TransitionWrapper } from "@/components/Transition";
 import useSettings from "@/hooks/useSettings";
 import OnlyMobileLayout from "@/layouts/OnlyMobileLayout";
-import { DM_Sans, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "@/styles/globals.css";
 import {
   QueryCache,
@@ -22,11 +22,6 @@ const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => toast.error(`Something went wrong: ${error.message}`),
   }),
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
 });
 
 const inter = Inter({
@@ -72,7 +67,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <SessionProvider session={pageProps.session}>
           <OnlyMobileLayout>
             <main
-              className={`flex flex-col ${dmSans.variable} ${inter.variable} font-sans`}
+              className={`flex flex-col ${inter.variable} font-inter`}
               style={{
                 height: `${pageHeight}px`,
               }}
@@ -85,7 +80,7 @@ export default function App({ Component, pageProps }: AppProps) {
                   />
                 )}
                 <div
-                  className={`flex flex-col grow px-4 xs:px-4 ${
+                  className={`flex flex-col grow ${
                     footerVisible ? "mb-20" : ""
                   }`}
                 >
@@ -102,7 +97,7 @@ export default function App({ Component, pageProps }: AppProps) {
             position="top-center"
             toastOptions={{
               duration: 5000,
-              className: "font-sans text-white",
+              className: "font-inter text-white",
             }}
           />
         </SessionProvider>

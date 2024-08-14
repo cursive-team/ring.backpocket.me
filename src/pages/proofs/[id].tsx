@@ -31,13 +31,14 @@ import {
 import { Card } from "@/components/cards/Card";
 import { IconCircle } from "@/components/IconCircle";
 import { cn } from "@/lib/client/utils";
+import { AppContent } from "@/components/AppContent";
 
 interface QuestDetailProps {
   loading?: boolean;
   quest: QuestWithRequirements | null;
 }
 
-const Label = classed.span("text-xs font-sans text-iron-600 font-semibold");
+const Label = classed.span("text-xs font-inter text-iron-600 font-semibold");
 
 type UserDetailProps = {
   label?: string;
@@ -56,7 +57,7 @@ export const UserDetail = ({
   numValidSigsCollected,
 }: UserDetailProps) => {
   return (
-    <div className="flex flex-col gap-8">
+    <AppContent className="flex flex-col gap-8">
       <div className="flex flex-col gap-4">
         <div>
           {users
@@ -75,7 +76,7 @@ export const UserDetail = ({
                       <Icons.Person size={12} />
                     </IconCircle>
                     <Card.Title
-                      className={"text-sm font-sans text-white font-bold"}
+                      className={"text-sm font-inter text-white font-bold"}
                     >
                       {displayName}
                     </Card.Title>
@@ -96,7 +97,7 @@ export const UserDetail = ({
                     <IconCircle>
                       <Icons.Person size={12} />
                     </IconCircle>
-                    <Card.Title className="text-sm font-sans text-iron-600 font-normal">
+                    <Card.Title className="text-sm font-inter text-iron-600 font-normal">
                       Ask to tap a new connection’s badge!
                     </Card.Title>
                   </div>
@@ -107,7 +108,7 @@ export const UserDetail = ({
           )}
         </div>
       </div>
-    </div>
+    </AppContent>
   );
 };
 
@@ -147,7 +148,7 @@ export const LocationDetail = ({
                       <Icons.Location size={12} />
                     </IconCircle>
                     <Card.Title
-                      className={"text-sm font-sans text-white font-bold"}
+                      className={"text-sm font-inter text-white font-bold"}
                     >
                       {name}
                     </Card.Title>
@@ -170,7 +171,7 @@ export const LocationDetail = ({
                     <IconCircle>
                       <Icons.Location size={12} />
                     </IconCircle>
-                    <Card.Title className="text-sm font-sans text-iron-600 font-normal">
+                    <Card.Title className="text-sm font-inter text-iron-600 font-normal">
                       Tap a talk card!
                     </Card.Title>
                   </div>
@@ -308,7 +309,7 @@ export default function QuestById() {
     !isQuestComplete;
 
   return (
-    <div>
+    <AppContent>
       <AppBackHeader />
       {quest && (
         <CompleteQuestModal
@@ -338,7 +339,7 @@ export default function QuestById() {
                 label={
                   <div className="flex gap-2 items-center">
                     {!isQuestComplete && (
-                      <Label className="text-gray-10 font-semibold font-sans">{`${numRequirementsSatisfied}/${numRequirementsTotal} collected`}</Label>
+                      <Label className="text-gray-10 font-semibold font-inter">{`${numRequirementsSatisfied}/${numRequirementsTotal} collected`}</Label>
                     )}
                   </div>
                 }
@@ -404,7 +405,7 @@ export default function QuestById() {
           )}
         </LoadingWrapper>
       }
-    </div>
+    </AppContent>
   );
 }
 

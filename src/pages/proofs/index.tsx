@@ -9,6 +9,7 @@ import React, { useMemo, useRef, useState } from "react";
 import { QuestWithCompletion } from "@/types";
 import { getPinnedQuest } from "@/lib/client/localStorage/questPinned";
 import { useQuestRequirements } from "@/hooks/useQuestRequirements";
+import { AppContent } from "@/components/AppContent";
 
 export default function QuestsPage() {
   const pinnedQuests = useRef<Set<number>>(getPinnedQuest());
@@ -39,8 +40,8 @@ export default function QuestsPage() {
   const { numRequirementsSatisfied } = useQuestRequirements(displayQuests);
 
   return (
-    <div className="flex flex-col gap-4 pt-4">
-      <span className="text-iron-600 font-sans text-xs">
+    <AppContent className="flex flex-col gap-4 pt-4">
+      <span className="text-iron-600 font-inter text-xs">
         Post proofs about your Backpocket experience on Twitter, while
         preserving privacy over the people you met and talks you attended.
       </span>
@@ -85,6 +86,6 @@ export default function QuestsPage() {
           )}
         </>
       </LoadingWrapper>
-    </div>
+    </AppContent>
   );
 }

@@ -32,6 +32,7 @@ import { Icons } from "@/components/Icons";
 import { logClientEvent } from "@/lib/client/metrics";
 import { useSession } from "next-auth/react";
 import { Icon } from "@mui/material";
+import { AppContent } from "@/components/AppContent";
 
 const Label = classed.span("text-sm text-gray-12");
 
@@ -568,7 +569,7 @@ const UserProfilePage = () => {
   const isOverlapComputed = psiState === PSIState.COMPLETE;
 
   return (
-    <div>
+    <AppContent>
       <ProfilePicModal
         isOpen={showProfilePicModal}
         setIsOpen={setShowProfilePicModal}
@@ -635,7 +636,7 @@ const UserProfilePage = () => {
 
         {user?.isSpeaker && (
           <div className="flex flex-col p-3 bg-secondary rounded">
-            <span className="font-sans text-sm font-semibold leading-6 text-white">
+            <span className="font-inter text-sm font-semibold leading-6 text-white">
               Workshop Speaker
             </span>
           </div>
@@ -836,7 +837,7 @@ const UserProfilePage = () => {
           )}
         </Card.Base>
       </div>
-    </div>
+    </AppContent>
   );
 };
 
