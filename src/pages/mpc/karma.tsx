@@ -235,7 +235,7 @@ export default function Karma() {
       console.log("Karma Time: ", karmaTime);
 
       const karmaResults = rowResults.map(
-        (rowResult, index) => rowResult - colResults[index]
+        (rowResult: any, index: number) => rowResult - colResults[index]
       );
       setKarmaResults(karmaResults);
       setOutput(OutputState.SHOW_RESULTS);
