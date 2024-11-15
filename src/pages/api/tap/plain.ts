@@ -121,7 +121,7 @@ export const generateChipSignature = async (
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<TapResponse | ErrorResponse>
+  res: NextApiResponse<{ url: string } | ErrorResponse>
 ) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -135,87 +135,8 @@ export default async function handler(
 
   // verify encryption
   const chipId = verifyCmac(chipEnc);
-  if (!chipId) {
-    return res.status(400).json({ error: "Invalid chipEnc provided" });
-  }
-
-  // chip key must exist
-  const chipKey = await prisma.chipKey.findFirst({
-    where: {
-      chipId,
-    },
-  });
-  if (!chipKey) {
-    return res.status(400).json({
-      code: TapResponseCode.CHIP_KEY_NOT_FOUND,
-      error: "Chip key not found",
-    });
-  }
-
-  console.log(chipKey);
-
-  // if user is registered, return user data
-  const user = await prisma.user.findUnique({
-    where: {
-      chipId,
-    },
-  });
-  if (user) {
-    // If user is not registered, return person not registered response
-    if (!user.isRegistered) {
-      return res
-        .status(200)
-        .json({ code: TapResponseCode.PERSON_NOT_REGISTERED });
-    }
-
-    // Get signature from chip
-    const { message, signature } = await generateChipSignature(chipId);
-
-    const personTapResponse: PersonTapResponse = {
-      displayName: user.displayName,
-      pkId: user.id.toString(),
-      psiPublicKeysLink: user.psiPublicKeysLink,
-      encryptionPublicKey: user.encryptionPublicKey,
-      twitter: user.twitter ? user.twitter : undefined,
-      telegram: user.telegram ? user.telegram : undefined,
-      bio: user.bio ? user.bio : undefined,
-      isUserSpeaker: user.isUserSpeaker,
-      signaturePublicKey: user.signaturePublicKey,
-      signatureMessage: message,
-      signature,
-    };
-    return res
-      .status(200)
-      .json({ code: TapResponseCode.VALID_PERSON, person: personTapResponse });
-  }
-
-  // if location is registered, return location data
-  const location = await prisma.location.findUnique({
-    where: {
-      chipId,
-    },
-  });
-  if (location) {
-    // Get signature from chip
-    const { message, signature } = await generateChipSignature(chipId);
-
-    const locationTapResponse: LocationTapResponse = {
-      id: location.id.toString(),
-      name: location.name,
-      stage: location.stage,
-      speaker: location.speaker,
-      description: location.description,
-      startTime: location.startTime,
-      endTime: location.endTime,
-      signaturePublicKey: location.signaturePublicKey,
-      signatureMessage: message,
-      signature,
-    };
-    return res.status(200).json({
-      code: TapResponseCode.VALID_LOCATION,
-      location: locationTapResponse,
-    });
-  }
-
-  return res.status(200).json({ code: TapResponseCode.PERSON_NOT_REGISTERED });
+  console.log("ChipId", chipId);
+  return res
+    .status(200)
+    .json({ url: `https://connections.cursive.team/tap?chipId=${chipId}` });
 }
