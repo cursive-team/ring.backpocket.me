@@ -252,46 +252,23 @@ export default function Tap() {
       },
     })
       .then((response) => {
-        if (!response.ok)
-          throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+          toast.error("Invalid tap! Please try again.");
+          router.push("/");
+          return;
+        }
         return response.json();
       })
-      .then(async (data) => {
-        const tapResponse = tapResponseSchema.validateSync(data);
-        switch (tapResponse.code) {
-          case TapResponseCode.CMAC_INVALID:
-            throw new Error("CMAC invalid!");
-          case TapResponseCode.PERSON_NOT_REGISTERED:
-            logClientEvent("tapPersonNotRegistered", {});
-            handlePersonRegistration(chipEnc!);
-            break;
-          case TapResponseCode.LOCATION_NOT_REGISTERED:
-            logClientEvent("tapLocationNotRegistered", {});
-            handleLocationRegistration(chipEnc!);
-            break;
-          case TapResponseCode.VALID_PERSON:
-            logClientEvent("tapValidPerson", {});
-            if (!tapResponse.person) {
-              throw new Error("Person is null!");
-            }
-            await handlePersonTap(tapResponse.person);
-            break;
-          case TapResponseCode.VALID_LOCATION:
-            logClientEvent("tapValidLocation", {});
-            if (!tapResponse.location) {
-              throw new Error("Location is null!");
-            }
-            await handleLocationTap(tapResponse.location);
-            break;
-          case TapResponseCode.CHIP_KEY_NOT_FOUND:
-            throw new Error("Chip key not found!");
-          default:
-            throw new Error("Invalid tap response code!");
-        }
+      .then((response) => {
+        const finalUrl = response.url;
+        console.log(finalUrl);
+        window.location.href = finalUrl;
       })
       .catch((error) => {
-        console.error(error);
-        toast.error("Error! Please contact a member of the Cursive team.");
+        console.error("Error fetching tap response: ", error);
+        toast.error(
+          "An error occured while processing the tap. Please try again."
+        );
         router.push("/");
       });
   }, [router, processPersonTap, processLocationTap]);

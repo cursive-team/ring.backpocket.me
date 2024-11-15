@@ -40,6 +40,7 @@ export const verifyCmac = (hexData: string): string | undefined => {
       let uid = Buffer.from(p_stream.slice(1, 1 + uid_length))
         .toString("hex")
         .toUpperCase();
+      console.log(uid);
       if (keyUids.includes(uid)) {
         return uid;
       }

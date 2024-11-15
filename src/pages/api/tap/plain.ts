@@ -121,7 +121,7 @@ export const generateChipSignature = async (
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<TapResponse | ErrorResponse>
+  res: NextApiResponse<{ url: string } | ErrorResponse>
 ) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -135,9 +135,10 @@ export default async function handler(
 
   // verify encryption
   const chipId = verifyCmac(chipEnc);
-  if (!chipId) {
-    return res.status(400).json({ error: "Invalid chipEnc provided" });
-  }
+  console.log("ChipId", chipId);
+  return res
+    .status(200)
+    .json({ url: `https://connections.cursive.team/tap?chipId=${chipId}` });
 
   // chip key must exist
   const chipKey = await prisma.chipKey.findFirst({
